@@ -6,25 +6,26 @@ import Login from "./Login";
 import Profile from "./Profile";
 
 function Navbar() {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const token = localStorage.getItem("token");
+    const navigate = useNavigate(); // Hook for programmatic navigation
+    const location = useLocation(); // Hook to get current location
+    const token = localStorage.getItem("token"); // Retrieve token from local storage
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        navigate("/login");
+        localStorage.removeItem("token"); // Remove token on logout
+        navigate("/login"); // Redirect to login page
     };
 
-    // Hide "Register" and "Login" if the user is logged in and on the profile page
+    // Check if the user is on the profile page
     const isProfilePage = location.pathname === "/profile";
 
     return (
         <AppBar position="static" sx={{ mb: 4 }}>
             <Toolbar>
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
-Hamtech                
-</Typography>
+                    Hamtech
+                </Typography>
 
+                {/* Show "Register" and "Login" only if user is not logged in and not on the profile page */}
                 {!token && !isProfilePage && (
                     <>
                         <Button color="inherit" component={Link} to="/register">Register</Button>
@@ -32,6 +33,7 @@ Hamtech
                     </>
                 )}
 
+                {/* Show "Profile" and "Logout" buttons if the user is logged in */}
                 {token && <Button color="inherit" component={Link} to="/profile">Profile</Button>}
                 {token && <Button color="inherit" onClick={handleLogout}>Logout</Button>}
             </Toolbar>
