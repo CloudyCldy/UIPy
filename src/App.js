@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
 import Register from "./Register";
 import Login from "./Login";
 import Profile from "./Profile";
+import Dashboard from "./Dashboard"; 
+
 
 function Navbar() {
-    const navigate = useNavigate(); // Hook for programmatic navigation
-    const location = useLocation(); // Hook to get current location
-    const token = localStorage.getItem("token"); // Retrieve token from local storage
+    const navigate = useNavigate();
+    const location = useLocation();
+    const token = localStorage.getItem("token");
 
     const handleLogout = () => {
-        localStorage.removeItem("token"); // Remove token on logout
-        navigate("/login"); // Redirect to login page
+        localStorage.removeItem("token");
+        navigate("/login");
     };
 
-    // Check if the user is on the profile page
     const isProfilePage = location.pathname === "/profile";
 
     return (
@@ -24,16 +25,12 @@ function Navbar() {
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
                     Hamtech
                 </Typography>
-
-                {/* Show "Register" and "Login" only if user is not logged in and not on the profile page */}
                 {!token && !isProfilePage && (
                     <>
                         <Button color="inherit" component={Link} to="/register">Register</Button>
                         <Button color="inherit" component={Link} to="/login">Login</Button>
                     </>
                 )}
-
-                {/* Show "Profile" and "Logout" buttons if the user is logged in */}
                 {token && <Button color="inherit" component={Link} to="/profile">Profile</Button>}
                 {token && <Button color="inherit" onClick={handleLogout}>Logout</Button>}
             </Toolbar>
@@ -50,6 +47,8 @@ export default function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/profile" element={<Profile />} />
+                    {/* Rutas del dashboard */}
+                    <Route path="/dashboard/:role" element={<Dashboard />} />
                 </Routes>
             </Box>
         </Router>
