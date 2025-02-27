@@ -1,0 +1,38 @@
+/* LoginStyles.css */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: rgba(159, 157, 93, 0.5);
+    backdrop-filter: blur(10px);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.login-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.MuiButton-containedPrimary {
+    background-color: #686620;
+}
+
+.MuiTypography-h5 {
+    color: #9f9d5d;
+    font-weight: bold;
+}

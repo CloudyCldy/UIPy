@@ -1,30 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import * as XLSX from "xlsx";
+import Hamster from "./Hamster";
+import Device from "./Device";
+import "./Dashboard.css";
 
 function Dashboard() {
     const { role } = useParams();
-    const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-
-    const tableStyle = {
-        borderCollapse: "collapse",
-        width: "100%",
-        marginTop: "20px"
-    };
-
-    const thStyle = {
-        backgroundColor: "#343a40",
-        color: "white",
-        padding: "8px",
-        textAlign: "left"
-    };
-
-    const tdStyle = {
-        border: "1px solid #ddd",
-        padding: "8px"
-    };
+    const [file, setFile] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 5; // Número de usuarios por página
 
     useEffect(() => {
         if (role === "admin") {
@@ -46,6 +35,22 @@ function Dashboard() {
         }
     }, [role]);
 
+    const downloadExcel = () => {
+        const worksheet = XLSX.utils.json_to_sheet(users);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+        XLSX.writeFile(workbook, "users.xlsx");
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setFile(file);
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
     const deleteUser = (id) => {
         fetch(`http://localhost:3000/users/${id}`, {
             method: "DELETE",
@@ -61,63 +66,92 @@ function Dashboard() {
             });
     };
 
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Lógica de paginación
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
-        <div className="container mt-4">
+        <div className="dashboard-container">
             <h1>{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</h1>
             {role === "admin" ? (
-                <div>
-                    <p>Welcome, Admin! You can manage users and settings here.</p>
-                    {loading ? (
-                        <p>Loading users...</p>
-                    ) : error ? (
-                        <p className="text-danger">Error: {error}</p>
-                    ) : (
-                        <table style={tableStyle}>
+                <div className="admin-section">
+                    <input
+                        type="text"
+                        placeholder="Search Users"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="search-input"
+                    />
+                    <div className="buttons-container">
+                        <button className="btn success" onClick={downloadExcel}>Download Excel</button>
+                        <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} id="file-upload" hidden />
+                        <label htmlFor="file-upload" className="btn primary">Select Excel File</label>
+                        <button className="btn secondary" disabled={!file}>Upload Excel</button>
+                    </div>
+
+                    <div className="users-table">
+                        <h2>User List</h2>
+                        <table>
                             <thead>
                                 <tr>
-                                    <th style={thStyle}>ID</th>
-                                    <th style={thStyle}>Name</th>
-                                    <th style={thStyle}>Email</th>
-                                    <th style={thStyle}>Role</th>
-                                    <th style={thStyle}>Actions</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.length > 0 ? (
-                                    users.map((user) => (
-                                        <tr key={user.id}>
-                                            <td style={tdStyle}>{user.id}</td>
-                                            <td style={tdStyle}>{user.name}</td>
-                                            <td style={tdStyle}>{user.email}</td>
-                                            <td style={tdStyle}>{user.rol}</td>
-                                            <td style={tdStyle}>
-                                                <button
-                                                    className="btn btn-danger"
-                                                    onClick={() => deleteUser(user.id)}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="5">No users found</td>
+                                {currentUsers.map((user) => (
+                                    <tr key={user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.role}</td>
+                                        <td>
+                                            <button className="btn danger" onClick={() => deleteUser(user.id)}>
+                                                Delete
+                                            </button>
+                                        </td>
                                     </tr>
-                                )}
+                                ))}
                             </tbody>
                         </table>
-                    )}
+                    </div>
+
+                    {/* Paginación */}
+                    <div className="pagination">
+                        <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+                            Previous
+                        </button>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => paginate(index + 1)}
+                                className={index + 1 === currentPage ? "active" : ""}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                        <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
+                            Next
+                        </button>
+                    </div>
                 </div>
             ) : (
-                <div>
-                    <p>Welcome, User! View your profile and settings here.</p>
-                    <img
-                        src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2Fjk--897694138222383666%2F&psig=AOvVaw2TcjYiZ0xEHV5T_WnMEZ8Q&ust=1740625435904000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCIiwupit4IsDFQAAAAAdAAAAABAE"
-                        alt="User profile"
-                        width="300"
-                        height="300"
-                    />
+                <div className="user-section">
+                    <Hamster />
+                    <Device />
                 </div>
             )}
         </div>

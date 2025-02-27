@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
-import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
 import Register from "./Register";
 import Login from "./Login";
 import Profile from "./Profile";
-import Dashboard from "./Dashboard"; 
+import Dashboard from "./Dashboard";
+import "./App.css"; // Incluyendo el archivo CSS para los estilos personalizados
+import logo from '../src/logo.png';
 
 
 function Navbar() {
@@ -20,21 +21,20 @@ function Navbar() {
     const isProfilePage = location.pathname === "/profile";
 
     return (
-        <AppBar position="static" sx={{ mb: 4 }}>
-            <Toolbar>
-                <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                    Hamtech
-                </Typography>
+        <div className="navbar">
+<img src={logo} alt="Logo" className="logo" />
+<h1 className="navbar-title">Hamtech</h1>
+            <div className="navbar-links">
                 {!token && !isProfilePage && (
                     <>
-                        <Button color="inherit" component={Link} to="/register">Register</Button>
-                        <Button color="inherit" component={Link} to="/login">Login</Button>
+                        <Link className="navbar-link" to="/register">Register</Link>
+                        <Link className="navbar-link" to="/login">Login</Link>
                     </>
                 )}
-                {token && <Button color="inherit" component={Link} to="/profile">Profile</Button>}
-                {token && <Button color="inherit" onClick={handleLogout}>Logout</Button>}
-            </Toolbar>
-        </AppBar>
+                {token && <Link className="navbar-link" to="/profile">Profile</Link>}
+                {token && <button className="navbar-button" onClick={handleLogout}>Logout</button>}
+            </div>
+        </div>
     );
 }
 
@@ -42,15 +42,14 @@ export default function App() {
     return (
         <Router>
             <Navbar />
-            <Box sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
+            <div className="app-container">
                 <Routes>
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/profile" element={<Profile />} />
-                    {/* Rutas del dashboard */}
                     <Route path="/dashboard/:role" element={<Dashboard />} />
                 </Routes>
-            </Box>
+            </div>
         </Router>
     );
 }

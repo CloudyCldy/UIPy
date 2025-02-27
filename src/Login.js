@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
+import "../src/LoginStyles.css";
 
 export default function Login() {
     const [user, setUser] = useState({ email: "", password: "" });
@@ -67,26 +68,26 @@ export default function Login() {
     useEffect(() => {
         if (token) {
             localStorage.setItem("token", token);
-            // Decodificar el token para obtener el rol
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const role = decodedToken.rol; // El rol viene en el payload del token
-
-            // Redirigir a la página del dashboard según el rol
+            const role = decodedToken.rol;
             navigate(`/dashboard/${role}`);
         }
     }, [token, navigate]);
 
     return (
-        <Card>
-            <CardContent>
-                <Typography variant="h5" gutterBottom>Login</Typography>
-                {message && <Typography color="error">{message}</Typography>}
-                <form onSubmit={handleLogin}>
-                    <TextField fullWidth margin="normal" label="Email" name="email" type="email" onChange={handleChange} required />
-                    <TextField fullWidth margin="normal" label="Password" name="password" type="password" onChange={handleChange} required />
-                    <Button type="submit" variant="contained" color="primary" fullWidth disabled={disabled}>Login</Button>
-                </form>
-            </CardContent>
-        </Card>
+        <div className="login-container">
+            
+            <Card className="login-card">
+                <CardContent>
+                    <Typography variant="h5" gutterBottom>Login</Typography>
+                    {message && <Typography color="error">{message}</Typography>}
+                    <form onSubmit={handleLogin}>
+                        <TextField fullWidth margin="normal" label="Email" name="email" type="email" onChange={handleChange} required />
+                        <TextField fullWidth margin="normal" label="Password" name="password" type="password" onChange={handleChange} required />
+                        <Button type="submit" variant="contained" color="primary" fullWidth disabled={disabled}>Login</Button>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
