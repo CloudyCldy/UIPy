@@ -23,52 +23,58 @@ h1 {
 }
 
 h2 {
-    font-size: 1rem; /* Smaller font size */
+    font-size: 1.5rem; /* Smaller font size */
 }
 
 /* Dashboard Container */
 .dashboard-container {
-    max-width: 1000px; /* Further reduced width */
+    max-width: 1000px;
     width: 100%;
     margin: 0 auto;
-    padding: 8px; /* Even smaller padding */
-    background-color: white; /* Background for the content */
-    border-radius: 6px; /* Smaller border radius */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Smaller shadow */
+    padding: 10px;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Admin Section */
 .admin-section {
     background-color: #F5E1A4; /* Light Cappuccino */
-    border-radius: 6px; /* Smaller border radius */
-    padding: 8px; /* Smaller padding */
+    border-radius: 6px;
+    padding: 10px;
 }
 
+/* Search Input */
 .search-input {
-    padding: 3px; /* Further reduced padding */
-    font-size: 0.625rem; /* Smaller font size */
-    border: 1px solid #D3B79A; /* Beige border */
-    border-radius: 4px; /* Smaller border radius */
-    width: 100%; /* Full width for search input */
-    max-width: 150px; /* Further reduced width */
-    margin-bottom: 5px; /* Reduced margin */
+    padding: 4px;
+    font-size: 0.75rem;
+    border: 1px solid #D3B79A;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 8px;
     display: inline-block;
 }
 
+/* Buttons Container - Mejorado */
 .buttons-container {
-    margin-bottom: 5px; /* Smaller margin */
     display: flex;
-    gap: 4px; /* Smaller gap */
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Evita que los botones se acomoden mal */
+    gap: 8px; /* Espaciado entre botones */
+    justify-content: flex-start; /* Alineación correcta */
+    margin-bottom: 10px; /* Más separación de la tabla */
 }
 
+/* Botones */
 .btn {
-    padding: 4px 8px; /* Smaller padding */
+    padding: 6px 12px;
     border: none;
-    border-radius: 4px; /* Smaller border radius */
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 0.625rem; /* Smaller font size */
+    font-size: 0.75rem;
     color: white;
+    min-width: 120px; /* Tamaño mínimo para que no se encojan */
+    text-align: center;
 }
 
 .btn.success {
@@ -88,65 +94,74 @@ h2 {
     background-color: #D64F4F; /* Red for delete */
 }
 
-.users-table {
-    margin-top: 5px; /* Smaller margin */
+/* Users Table */
+.table-container {
+    margin-top: 10px;
     width: 100%;
     border-collapse: collapse;
 }
 
-.users-table table {
+.table-container table {
     width: 100%;
     border: 1px solid #D3B79A;
 }
 
-.users-table th, .users-table td {
-    padding: 4px 6px; /* Smaller padding */
+.table-container th, .users-table td {
+    padding: 6px 8px;
     border: 1px solid #D3B79A;
     text-align: left;
 }
 
-.users-table th {
+.table-container th {
     background-color: #F5E1A4;
     color: #6F4F37;
 }
 
-.users-table tr:nth-child(even) {
+.table-container tr:nth-child(even) {
     background-color: #F4F1E1;
 }
 
-.users-table tr:hover {
+.table-container tr:hover {
     background-color: #E0D2A7;
 }
 
 /* User Section */
 .user-section {
     text-align: center;
-    padding: 10px 0; /* Even smaller padding */
+    padding: 10px 0;
 }
 
+/* File Input */
 input[type="file"] {
     display: none;
 }
+
+/* Paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
 .pagination button {
     margin: 0 5px;
     padding: 5px 10px;
     cursor: pointer;
-    border: 1px solid #D3B79A; /* Beige border */
-    background-color: #F5E1A4; /* Light Cappuccino */
-    color: #6F4F37; /* Dark Cappuccino text */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 0.9rem; /* Slightly larger font size */
+    border: 1px solid #D3B79A;
+    background-color: #F5E1A4;
+    color: #6F4F37;
+    border-radius: 5px;
+    font-size: 0.9rem;
 }
 
 .pagination button:hover {
-    background-color: #A67858; /* Warm Cappuccino */
-    color: white; /* Text color on hover */
+    background-color: #A67858;
+    color: white;
 }
 
 .pagination .active {
     font-weight: bold;
-    background-color: #6F4F37; /* Dark Cappuccino */
-    color: white; /* White text */
-    border-color: #6F4F37; /* Matching border color */
+    background-color: #6F4F37;
+    color: white;
+    border-color: #6F4F37;
 }
-

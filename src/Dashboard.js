@@ -4,6 +4,7 @@ import * as XLSX from "xlsx";
 import Hamster from "./Hamster";
 import Device from "./Device";
 import "./Dashboard.css";
+import UserChart from "./UserChart";
 
 function Dashboard() {
     const { role } = useParams();
@@ -13,7 +14,7 @@ function Dashboard() {
     const [file, setFile] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const usersPerPage = 5; // Número de usuarios por página
+    const usersPerPage = 5;
 
     useEffect(() => {
         if (role === "admin") {
@@ -43,8 +44,7 @@ function Dashboard() {
     };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setFile(file);
+        setFile(e.target.files[0]);
     };
 
     const handleSearchChange = (e) => {
@@ -71,35 +71,33 @@ function Dashboard() {
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Lógica de paginación
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <div className="dashboard-container">
             <h1>{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</h1>
             {role === "admin" ? (
                 <div className="admin-section">
-                    <input
-                        type="text"
-                        placeholder="Search Users"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        className="search-input"
-                    />
-                    <div className="buttons-container">
-                        <button className="btn success" onClick={downloadExcel}>Download Excel</button>
-                        <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} id="file-upload" hidden />
-                        <label htmlFor="file-upload" className="btn primary">Select Excel File</label>
-                        <button className="btn secondary" disabled={!file}>Upload Excel</button>
+                    <div className="top-controls">
+                        <input
+                            type="text"
+                            placeholder="Search Users"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="search-input"
+                        />
+                        <div className="buttons-container">
+                            <button className="btn success" onClick={downloadExcel}>Download Excel</button>
+                            <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} id="file-upload" hidden />
+                            <label htmlFor="file-upload" className="btn primary">Select Excel File</label>
+                            <button className="btn secondary" disabled={!file}>Upload Excel</button>
+                        </div>
                     </div>
-
-                    <div className="users-table">
+                    
+                    <div className="table-container">
                         <h2>User List</h2>
                         <table>
                             <thead>
@@ -117,7 +115,7 @@ function Dashboard() {
                                         <td>{user.id}</td>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
-                                        <td>{user.role}</td>
+                                        <td>{user.rol}</td>
                                         <td>
                                             <button className="btn danger" onClick={() => deleteUser(user.id)}>
                                                 Delete
@@ -129,21 +127,22 @@ function Dashboard() {
                         </table>
                     </div>
 
-                    {/* Paginación */}
+                    <UserChart users={users} />
+                    
                     <div className="pagination">
-                        <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+                        <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
                             Previous
                         </button>
                         {[...Array(totalPages)].map((_, index) => (
                             <button
                                 key={index}
-                                onClick={() => paginate(index + 1)}
+                                onClick={() => setCurrentPage(index + 1)}
                                 className={index + 1 === currentPage ? "active" : ""}
                             >
                                 {index + 1}
                             </button>
                         ))}
-                        <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
+                        <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
                             Next
                         </button>
                     </div>
