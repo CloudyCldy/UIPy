@@ -28,9 +28,10 @@ body {
 }
 
 .logo {
-    width: 50px;
-    height: auto;
+    width: 100px; /* Ajusta el tamaño según sea necesario */
+    height: auto; /* Mantiene las proporciones del logo */
 }
+
 
 .navbar-title {
     font-size: 2rem;

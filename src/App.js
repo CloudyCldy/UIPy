@@ -4,8 +4,8 @@ import Register from "./Register";
 import Login from "./Login";
 import Profile from "./Profile";
 import Dashboard from "./Dashboard";
-import "./App.css"; // Incluyendo el archivo CSS para los estilos personalizados
-import logo from '../src/logo.png';
+import "./App.css"; 
+import logo from '../src/hobito.png';
 
 
 function Navbar() {
