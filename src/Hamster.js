@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import axios from "axios";
+import "../src/Hamster.css";
 import AddHamsterButton from "./AddHamsterButton";
 
 const Hamster = () => {
@@ -16,6 +16,8 @@ const Hamster = () => {
         device_id: "",
         user_id: "",
     });
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     useEffect(() => {
         fetchHamsters();
@@ -79,116 +81,81 @@ const Hamster = () => {
         }
     };
 
+    // Paginación
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentHamsters = hamsters.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(hamsters.length / itemsPerPage);
+
     return (
         <>
-            <AddHamsterButton fetchHamsters={fetchHamsters} />
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>User ID</TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Breed</TableCell>
-                            <TableCell>Age</TableCell>
-                            <TableCell>Weight</TableCell>
-                            <TableCell>Health Notes</TableCell>
-                            <TableCell>Device ID</TableCell>
-                            <TableCell>Created</TableCell>
-                            <TableCell>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {hamsters.map((hamster) => (
-                            <TableRow key={hamster.id}>
-                                <TableCell>{hamster.id}</TableCell>
-                                <TableCell>{hamster.user_id}</TableCell>
-                                <TableCell>{hamster.name}</TableCell>
-                                <TableCell>{hamster.breed}</TableCell>
-                                <TableCell>{hamster.age}</TableCell>
-                                <TableCell>{hamster.weight}</TableCell>
-                                <TableCell>{hamster.health_notes}</TableCell>
-                                <TableCell>{hamster.device_id}</TableCell>
-                                <TableCell>{hamster.created_at}</TableCell>
-                                <TableCell>
-                                    <Button color="primary" onClick={() => handleEdit(hamster)}>Edit</Button>
-                                    <Button color="secondary" onClick={() => handleDelete(hamster.id)}>Delete</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <div className="header-container">
+                <h1>Hamster List</h1>
+                <AddHamsterButton fetchHamsters={fetchHamsters} />
+            </div>
 
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit Hamster</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        label="Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Breed"
-                        name="breed"
-                        value={formData.breed}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Age"
-                        name="age"
-                        value={formData.age}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Weight"
-                        name="weight"
-                        value={formData.weight}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Health Notes"
-                        name="health_notes"
-                        value={formData.health_notes}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="Device ID"
-                        name="device_id"
-                        value={formData.device_id}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        label="User ID"
-                        name="user_id"
-                        value={formData.user_id}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSubmit} color="primary">
-                        Save
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <table className="hamster-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Breed</th>
+                        <th>Age</th>
+                        <th>Weight</th>
+                        <th>Health Notes</th>
+                        <th>Device ID</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {currentHamsters.map((hamster) => (
+                        <tr key={hamster.id}>
+                            <td>{hamster.id}</td>
+                            <td>{hamster.user_id}</td>
+                            <td>{hamster.name}</td>
+                            <td>{hamster.breed}</td>
+                            <td>{hamster.age}</td>
+                            <td>{hamster.weight}</td>
+                            <td>{hamster.health_notes}</td>
+                            <td>{hamster.device_id}</td>
+                            <td>{hamster.created_at}</td>
+                            <td>
+                                <button className="hamster-edit" onClick={() => handleEdit(hamster)}>Edit</button>
+                                <button className="hamster-delete" onClick={() => handleDelete(hamster.id)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            {/* Paginación */}
+            <div className="pagination">
+                <button className="pagination-button" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
+                    Previous
+                </button>
+                <span>Page {currentPage} of {totalPages}</span>
+                <button className="pagination-button" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
+                    Next
+                </button>
+            </div>
+
+            {open && (
+                <div className="modal">
+                    <h2>Edit Hamster</h2>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
+                    <input type="text" name="breed" value={formData.breed} onChange={handleChange} placeholder="Breed" />
+                    <input type="text" name="age" value={formData.age} onChange={handleChange} placeholder="Age" />
+                    <input type="text" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" />
+                    <input type="text" name="health_notes" value={formData.health_notes} onChange={handleChange} placeholder="Health Notes" />
+                    <input type="text" name="device_id" value={formData.device_id} onChange={handleChange} placeholder="Device ID" />
+                    <input type="text" name="user_id" value={formData.user_id} onChange={handleChange} placeholder="User ID" />
+                    <button className="modal-button" onClick={handleClose}>Cancel</button>
+                    <button className="modal-button" onClick={handleSubmit}>Save</button>
+                </div>
+            )}
         </>
     );
 };
