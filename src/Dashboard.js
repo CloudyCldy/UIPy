@@ -5,6 +5,7 @@ import Hamster from "./Hamster";
 import Device from "./Device";
 import "./Dashboard.css";
 import UserChart from "./UserChart";
+import axios from "axios"; // Make sure to install axios
 
 function Dashboard() {
     const { role } = useParams();
@@ -76,6 +77,35 @@ function Dashboard() {
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
+    // Function to handle file upload
+    const uploadExcel = () => {
+        if (!file) {
+            setError("Please select a file first.");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append("file", file);
+    
+        axios.post("http://localhost:3000/import-excel", formData)
+            .then((response) => {
+                alert(response.data.message);
+                
+                // Check if insertedRows is a number and update state accordingly
+                if (response.data.insertedRows > 0) {
+                    // If insertedRows > 0, you can fetch the users again or update state accordingly
+                    // Example of fetching users again (you could optimize this as per your needs)
+                    fetch("http://localhost:3000/users")
+                        .then((response) => response.json())
+                        .then((data) => setUsers(data));
+                }
+            })
+            .catch((err) => {
+                setError("Failed to upload the file.");
+                console.error(err);
+            });
+    };
+    
     return (
         <div className="dashboard-container">
             <h1>{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</h1>
@@ -93,7 +123,9 @@ function Dashboard() {
                             <button className="btn success" onClick={downloadExcel}>Download Excel</button>
                             <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} id="file-upload" hidden />
                             <label htmlFor="file-upload" className="btn primary">Select Excel File</label>
-                            <button className="btn secondary" disabled={!file}>Upload Excel</button>
+                            <button className="btn secondary" onClick={uploadExcel} disabled={!file}>
+                                Upload Excel
+                            </button>
                         </div>
                     </div>
                     
