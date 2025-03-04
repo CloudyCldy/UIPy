@@ -1,5 +1,6 @@
 /* App.css */
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 /* General Styles */
 body {
     font-family: 'Poppins', sans-serif;
@@ -12,6 +13,7 @@ body {
     align-items: center;
     height: 100vh; /* Full height */
     flex-direction: column; /* Stack navbar and content vertically */
+    background: linear-gradient(135deg, rgba(244, 241, 225, 0.7), rgba(226, 209, 188, 0.7)); /* Soft gradient with transparency */
 }
 
 /* Navbar */
@@ -19,74 +21,154 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #A67858; /* Warm Cappuccino */
-    padding: 15px 30px;
+    background-color: rgba(166, 120, 88, 0.85); /* Semi-transparent Warm Cappuccino */
+    padding: 10px 20px; /* Reduced padding */
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 100;
+    border-bottom: 3px solid #D3B79A; /* Soft border under navbar */
+    border-radius: 10px 10px 0 0; /* Rounded top corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    backdrop-filter: blur(10px); /* Apply blur effect to the background */
+    height: 50px; /* Reduced height */
 }
 
-.logo {
-    width: 100px; /* Ajusta el tamaño según sea necesario */
-    height: auto; /* Mantiene las proporciones del logo */
-}
-
-
-.navbar-title {
-    font-size: 2rem;
-    color: white;
-    margin: 0;
-    font-family: 'Lexend Deca', sans-serif;
-
-}
-
-.navbar-links {
+/* Logo Container */
+.logo-container {
+    position: relative;
     display: flex;
-    gap: 15px;
     align-items: center;
 }
 
+/* Logo */
+.logo {
+    width: 80px; /* Adjusted size of logo */
+    height: auto; /* Maintains logo proportions */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition */
+}
+
+.logo:hover {
+    transform: scale(1.1); /* Slightly enlarge the logo on hover */
+    filter: brightness(0) saturate(100%) invert(35%) sepia(100%) saturate(560%) hue-rotate(23deg) brightness(98%) contrast(89%);
+}
+
+/* Options Dropdown (visible only when hovering over logo) */
+.options-dropdown {
+    position: absolute;
+    top: 100%; /* Position it below the logo */
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.85); /* White background with slight transparency */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    transition: opacity 0.3s ease; /* Smooth transition for appearing */
+    opacity: 0;
+    pointer-events: none; /* Initially disable interactions */
+}
+
+.logo-container:hover .options-dropdown {
+    opacity: 1; /* Show options when hovering over logo */
+    pointer-events: all; /* Enable interactions when visible */
+}
+
+/* Navbar Title */
+.navbar-title {
+    font-size: 1.6rem; /* Reduced font size */
+    color: white;
+    margin: 0;
+    font-family: 'Lexend Deca', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.navbar-title:hover {
+    transform: scale(1.1); /* Slightly enlarge the title */
+    color: #6F4F37; /* Dark coffee color */
+    text-shadow: 0 0 10px #fff, 0 0 20px #ff7f00, 0 0 30px #ff7f00, 0 0 40px #ff7f00, 0 0 50px #ff7f00, 0 0 75px #ff7f00; /* Neon effect */
+}
+
+/* Profile Button - Circular */
+.profile-button {
+    background-color: #D3B79A; /* Light beige button */
+    color: white;
+    padding: 10px;
+    border-radius: 50%; /* Circular shape */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin-left: auto; /* Position it on the right */
+    text-decoration: none; /* Remove underline */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.profile-button:hover {
+    background-color: #D3B79A; /* Keep color on hover */
+    transform: scale(1.1); /* Enlarge on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle glow effect */
+}
+
+/* Navbar Links */
+.navbar-links {
+    display: flex;
+    gap: 15px; /* Reduced gap */
+    align-items: center;
+}
+
+/* Navbar Link */
 .navbar-link {
     color: white;
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
-.navbar-link:hover {
-    color: #D3B79A; /* Light Beige */
-}
-
+/* Navbar Button */
 .navbar-button {
     padding: 8px 16px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     border: none;
-    border-radius: 5px;
-    background-color: #D64F4F; /* Red for logout */
+    border-radius: 8px;
+    background-color: rgba(214, 79, 79, 0.85); /* Semi-transparent Red for logout */
     color: white;
     cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
 }
 
 .navbar-button:hover {
-    background-color: #C64D4D;
+    background-color: rgba(198, 77, 77, 0.9);
+    box-shadow: 0 4px 10px rgba(214, 79, 79, 0.5); /* Subtle glow effect */
+    transform: translateY(-2px); /* Lift effect on hover */
 }
 
 /* App Container */
 .app-container {
-    max-width: 70%;
+    max-width: 100%;
     margin: 0 auto;
     padding: 30px;
-    padding-top: 80px; /* Adjust to avoid overlap with navbar */
+    padding-top: 90px;
     width: 100%;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    max-height: 100%;
     height: 100%;
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
 }
-
-/* Link Styles for active and hover */
-.navbar-link.active {
-    text-decoration: underline;
+body {
+    cursor: url('../src/cursor.png'), auto;
 }

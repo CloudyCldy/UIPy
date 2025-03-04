@@ -1,0 +1,170 @@
+body {
+    margin: 0;
+    color: #6a6f8c;
+    background: #c8c8c8;
+    font: 600 16px/18px 'Open Sans', sans-serif;
+    animation: fadeIn 1s ease-in-out;
+}
+
+*,
+*:after,
+*:before {
+    box-sizing: border-box;
+}
+
+.clearfix:after,
+.clearfix:before {
+    content: '';
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+    display: block;
+}
+::placeholder {
+    color: black;
+}
+
+.clearfix:before {
+    content: '';
+}
+
+.normal, .admin {
+    color: #927b67;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.register-wrap {
+    width: 100%;
+    margin: auto;
+    max-width: 1200px;
+    min-height: 670px;
+    position: relative;
+    background: url(https://media.istockphoto.com/id/1350745446/photo/cute-syrian-hamster-drinking-red-wine.jpg?s=612x612&w=0&k=20&c=THispx1adPdSRitOzEzBEdlaPOMjyfASA1tbr6UA0sc=) no-repeat center;
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19);
+    animation: slideIn 0.8s ease-in-out;
+}
+
+h2 {
+    color: #fbfafa;
+    font-size: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.register-html {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding: 90px 70px 50px 70px;
+    background: rgba(25, 25, 25, 0.562);
+    animation: slideUp 1s ease-in-out;
+}
+
+.register-form {
+    min-height: 345px;
+    position: relative;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    animation: bounceInUp 0.6s ease-in-out;
+}
+
+.group {
+    margin-bottom: 15px;
+}
+
+.label {
+    color: #f8f8f8;
+    font-size: 14px;
+}
+
+.input {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, .1);
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    margin-top: 5px;
+    transition: background 0.3s ease;
+}
+
+.input:focus {
+    background: rgba(255, 255, 255, .3);
+}
+
+select.input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.button {
+    background: #81754d;
+    padding: 15px 20px;
+    width: 100%;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #71684a;
+}
+
+.error-message {
+    color: #f44336;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(-50px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(50px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

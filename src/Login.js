@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
-import "../src/LoginStyles.css";
+import "./LoginStyles.css";
 
 export default function Login() {
     const [user, setUser] = useState({ email: "", password: "" });
@@ -75,19 +74,40 @@ export default function Login() {
     }, [token, navigate]);
 
     return (
-        <div className="login-container">
-            
-            <Card className="login-card">
-                <CardContent>
-                    <Typography variant="h5" gutterBottom>Login</Typography>
-                    {message && <Typography color="error">{message}</Typography>}
+        <div className="login-wrap">
+            <div className="login-html">
+                <h2 className="h2">Login</h2>
+                {message && <p className="error-message">{message}</p>}
+                <div className="login-form">
                     <form onSubmit={handleLogin}>
-                        <TextField fullWidth margin="normal" label="Email" name="email" type="email" onChange={handleChange} required />
-                        <TextField fullWidth margin="normal" label="Password" name="password" type="password" onChange={handleChange} required />
-                        <Button type="submit" variant="contained" color="primary" fullWidth disabled={disabled}>Login</Button>
+                        <div className="group">
+                            <input
+                                type="email"
+                                name="email"
+                                className="input"
+                                placeholder="Email"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="group">
+                            <input
+                                type="password"
+                                name="password"
+                                className="input"
+                                placeholder="Password"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="group">
+                            <button type="submit" className="button animated-button" disabled={disabled}>
+                                Login
+                            </button>
+                        </div>
                     </form>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
         </div>
     );
 }

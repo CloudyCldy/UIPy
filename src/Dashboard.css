@@ -1,142 +1,172 @@
 /* General Styles */
 body {
     font-family: 'Poppy', sans-serif;
-    background-color: #F4F1E1; /* Beige background */
+    background-color: #2C2C2C; /* Fondo oscuro */
     margin: 0;
     padding: 0;
-    color: #3E3B36; /* Dark grayish brown */
+    color: #181717; /* Texto claro */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh; /* Full height */
     flex-direction: column;
+    overflow-x: hidden; /* Evitar el desbordamiento horizontal */
+    transition: background-color 0.3s ease-in-out;
+    animation: fadeIn 1s ease-in-out;
+    cursor: url('../src/cursor.png'), auto;
+    max-width: 1600px;
 }
 
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Header */
 h1, h2 {
-    color: #6F4F37; /* Cappuccino color */
-    margin-bottom: 3px; /* Reduced margin */
+    color: #F4E1A4; /* Color cálido */
+    margin-bottom: 4px; /* Aún menos separación */
+    text-align: center;
+    transition: color 0.3s ease;
 }
 
 h1 {
-    font-size: 1.25rem; /* Smaller font size */
-    text-align: center;
+    font-size: 0.9rem; /* Más pequeño */
 }
 
 h2 {
-    font-size: 1.5rem; /* Smaller font size */
+    font-size: 0.75rem; /* Más pequeño */
 }
 
 /* Dashboard Container */
 .dashboard-container {
-    max-width: 1000px;
+    max-width: 1200px; /* Ancho más grande */
     width: 100%;
     margin: 0 auto;
-    padding: 10px;
-    background-color: white;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px; /* Menos espacio */
+    background: linear-gradient(145deg, #3E3B36, #5D5341); /* Degradado sutil */
+    border-radius: 8px; /* Bordes más redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease-in-out;
+    overflow-x: hidden; /* Evitar desbordamiento */
+}
+
+.dashboard-container:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Admin Section */
 .admin-section {
-    background-color: #F5E1A4; /* Light Cappuccino */
+    background-color: rgba(245, 225, 164, 0.6); 
     border-radius: 6px;
-    padding: 10px;
+    padding: 6px; /* Menos padding */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.admin-section:hover {
+    transform: scale(1.02); /* Menos aumento */
+    background-color: rgba(211, 183, 154, 0.7);
 }
 
 /* Search Input */
 .search-input {
     padding: 4px;
-    font-size: 0.75rem;
+    font-size: 0.65rem; /* Más pequeño */
     border: 1px solid #D3B79A;
-    border-radius: 4px;
+    border-radius: 4px; /* Bordes más pequeños */
     width: 100%;
-    max-width: 200px;
-    margin-bottom: 8px;
+    max-width: 180px; /* Más ancho */
+    margin-bottom: 6px;
     display: inline-block;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #E0E0E0;
+    transition: border 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
-/* Buttons Container - Mejorado */
+.search-input:focus {
+    border-color: #F4E1A4;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons Container */
 .buttons-container {
     display: flex;
-    flex-wrap: nowrap; /* Evita que los botones se acomoden mal */
-    gap: 8px; /* Espaciado entre botones */
-    justify-content: flex-start; /* Alineación correcta */
-    margin-bottom: 10px; /* Más separación de la tabla */
+    flex-wrap: nowrap;
+    gap: 4px; /* Menos espacio */
+    justify-content: flex-start;
+    margin-bottom: 6px; /* Menos separación */
 }
 
-/* Botones */
+/* Buttons */
 .btn {
-    padding: 6px 12px;
+    padding: 4px 8px; /* Menos padding */
     border: none;
-    border-radius: 4px;
+    border-radius: 4px; /* Bordes más pequeños */
     cursor: pointer;
-    font-size: 0.75rem;
-    color: white;
-    min-width: 120px; /* Tamaño mínimo para que no se encojan */
+    font-size: 0.65rem; /* Más pequeño */
+    color: black;
+    min-width: 90px; /* Más pequeño */
     text-align: center;
+    background-color: rgba(211, 183, 154, 0.6);
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.btn.success {
-    background-color: #A67858; /* Warm Cappuccino */
+.btn:hover {
+    transform: translateY(-2px);
+    background-color: rgba(245, 225, 164, 0.8);
 }
 
-.btn.primary {
-    background-color: #D3B79A; /* Beige */
-}
-
+/* Disabled Button */
 .btn.secondary {
-    background-color: #B0A18B; /* Light Grayish Brown */
+    background-color: rgba(176, 161, 139, 0.5);
     cursor: not-allowed;
-}
-
-.btn.danger {
-    background-color: #D64F4F; /* Red for delete */
+    opacity: 0.5;
 }
 
 /* Users Table */
 .table-container {
-    margin-top: 10px;
+    margin-top: 10px; /* Menos espacio */
     width: 100%;
     border-collapse: collapse;
+    overflow-x: auto;
 }
 
 .table-container table {
     width: 100%;
+    border-radius: 6px; /* Bordes más pequeños */
+    background: transparent;
     border: 1px solid #D3B79A;
+    transition: border-color 0.3s ease;
 }
 
 .table-container th, .users-table td {
-    padding: 6px 8px;
+    padding: 4px 8px; /* Menos padding */
     border: 1px solid #D3B79A;
     text-align: left;
+    transition: background-color 0.3s ease;
+    color: black;
 }
 
 .table-container th {
-    background-color: #F5E1A4;
-    color: #6F4F37;
+    background-color: rgba(111, 79, 55, 0.6);
+    color: #F4E1A4;
 }
 
 .table-container tr:nth-child(even) {
-    background-color: #F4F1E1;
+    background-color: rgba(244, 241, 225, 0.6);
 }
 
 .table-container tr:hover {
-    background-color: #E0D2A7;
+    background-color: rgba(93, 83, 65, 0.6);
 }
 
-/* User Section */
-.user-section {
-    text-align: center;
-    padding: 10px 0;
-}
-
-/* File Input */
-input[type="file"] {
-    display: none;
-}
-
-/* Paginación */
+/* Pagination */
 .pagination {
     display: flex;
     justify-content: center;
@@ -144,24 +174,45 @@ input[type="file"] {
 }
 
 .pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
+    margin: 0 4px; /* Menos margen */
+    padding: 4px 8px; /* Menos padding */
     cursor: pointer;
     border: 1px solid #D3B79A;
-    background-color: #F5E1A4;
-    color: #6F4F37;
-    border-radius: 5px;
-    font-size: 0.9rem;
+    background-color: rgba(111, 79, 55, 0.6);
+    color: #F4E1A4;
+    border-radius: 50%; /* Forma circular */
+    font-size: 0.75rem; /* Más pequeño */
+    transition: background-color 0.3s, transform 0.2s ease;
 }
 
 .pagination button:hover {
-    background-color: #A67858;
-    color: white;
+    background-color: rgba(245, 225, 164, 0.8);
+    color: black;
+    transform: translateY(-2px);
 }
 
 .pagination .active {
     font-weight: bold;
-    background-color: #6F4F37;
+    background-color: rgba(93, 83, 65, 0.8);
     color: white;
-    border-color: #6F4F37;
+    border-color: rgba(93, 83, 65, 0.8);
+}
+
+/* User Section */
+.user-section {
+    text-align: center;
+    padding: 8px 0; /* Menos padding */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    border-radius: 4px;
+    background-color: rgba(93, 83, 65, 0.2);
+}
+
+.user-section:hover {
+    transform: scale(1.02);
+    background-color: rgba(93, 83, 65, 0.3);
+}
+
+/* File Input */
+input[type="file"] {
+    display: none;
 }

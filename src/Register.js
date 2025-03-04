@@ -1,76 +1,117 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Card, CardContent, Typography, MenuItem } from "@mui/material";
+import "../src/Register.css"; // Asegúrate de que el archivo CSS esté bien enlazado
 
 export default function Register() {
-    // State to store user data
+    // Estado para almacenar los datos del usuario
     const [user, setUser] = useState({ name: "", email: "", password: "", rol: "normal" });
     
-    // State to store success or error messages
+    // Estado para almacenar mensajes de éxito o error
     const [message, setMessage] = useState(null);
     
-    // Hook for navigation between routes
+    // Hook para navegar entre las rutas
     const navigate = useNavigate();
 
-    // Handle changes in form fields
+    // Manejar cambios en los campos del formulario
     const handleChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
-    // Handle form submission for registration
+    // Manejar el envío del formulario para registro
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            // Send user data to the backend for registration
+            // Enviar los datos del usuario al backend para registrarse
             await axios.post("http://localhost:3000/register", user);
             
-            // Display success message
-            setMessage("Successful");
+            // Mostrar mensaje de éxito
+            setMessage("Registration successful!");
             
-            // Redirect the user to the login page after 2 seconds
+            // Redirigir al usuario a la página de inicio de sesión después de 2 segundos
             setTimeout(() => navigate("/login"), 2000);
         } catch (error) {
-            // Capture and display backend errors
-            setMessage(error.response?.data?.message || "Failed");
+            // Capturar y mostrar errores del backend
+            setMessage(error.response?.data?.message || "Registration failed.");
         }
     };
 
     return (
-        <Card>
-            <CardContent>
-                <Typography variant="h5" gutterBottom>Register</Typography>
-                
-                {/* Display error or success message */}
-                {message && <Typography color="error">{message}</Typography>}
-                
-                <form onSubmit={handleRegister}>
-                    {/* Name field */}
-                    <TextField fullWidth margin="normal" label="Name" name="name" onChange={handleChange} required />
-                    
-                    {/* Email field */}
-                    <TextField fullWidth margin="normal" label="Email" name="email" type="email" onChange={handleChange} required />
-                    
-                    {/* Password field */}
-                    <TextField fullWidth margin="normal" label="Password" name="password" type="password" onChange={handleChange} required />
-                    
-                    {/* User role selector */}
-                    <TextField
-                        select
-                        fullWidth
-                        margin="normal"
-                        label="Role"
-                        name="rol"
-                        value={user.rol}
-                        onChange={handleChange}
-                        required
-                    >
-                        <MenuItem value="normal">Normal</MenuItem>
-                        <MenuItem value="admin">Admin</MenuItem>
-                    </TextField>
+        <div className="register-wrap">
+            <div className="register-html">
+                <div className="register-form">
+                    <h2 className="h2">Register</h2>
 
-                    {/* Button to register the user */}
-                    <Button type="submit" variant="contained" color="primary" fullWidth>Register</Button>
-                </form>
-            </CardContent>
-        </Card>
+                    {/* Mostrar mensaje de error o éxito */}
+                    {message && <p className="error-message">{message}</p>}
+
+                    <form onSubmit={handleRegister}>
+                        {/* Campo para el nombre */}
+                        <div className="group">
+                            <label htmlFor="name" className="label">Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                className="input"
+                                value={user.name}
+                                onChange={handleChange}
+                                placeholder="Name"
+                                required
+                            />
+                        </div>
+                        
+                        {/* Campo para el correo electrónico */}
+                        <div className="group">
+                            <label htmlFor="email" className="label">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                className="input"
+                                value={user.email}
+                                onChange={handleChange}
+                                placeholder="Email"
+                                required
+                            />
+                        </div>
+                        
+                        {/* Campo para la contraseña */}
+                        <div className="group">
+                            <label htmlFor="password" className="label">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                className="input"
+                                value={user.password}
+                                onChange={handleChange}
+                                placeholder="Password"
+                                required
+                            />
+                        </div>
+                        
+                        {/* Selector de rol del usuario */}
+                        <div className="group">
+                            <label htmlFor="rol" className="label">Role</label>
+                            <select
+                                id="rol"
+                                name="rol"
+                                className="input"
+                                value={user.rol}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="normal" className="normal">Normal</option>
+                                <option value="admin" className="admin">Admin</option>
+                            </select>
+                        </div>
+
+                        {/* Botón para registrar al usuario */}
+                        <div className="group">
+                            <button type="submit" className="button">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 }

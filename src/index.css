@@ -1,7 +1,7 @@
 /* General Styles */
 body {
     font-family: 'Poppy', sans-serif;
-    background-color: #F4F1E1; /* Beige background */
+    background-color: #232323; /* Beige background */
     margin: 0;
     padding: 0;
     color: #3E3B36; /* Dark grayish brown */
@@ -19,16 +19,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #F4F1E1; /* Beige background */
+    background-color: #000000; /* Beige background */
+
 }
 
 /* App Component */
 .App {
-    max-width: 800px; /* Reduce the size of the app container */
+    max-width: 1200px; /* Reduce the size of the app container */
     width: 100%;
     margin: 0 auto;
     padding: 30px;
-    background-color: white; /* Background for the content */
+    background-color: rgb(35, 35, 35); /* Background for the content */
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for better separation */
 }
