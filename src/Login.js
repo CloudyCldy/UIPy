@@ -52,7 +52,7 @@ export default function Login() {
 
         try {
             // Cambié la URL para usar la IP pública de EC2
-            const res = await axios.post("http://54.242.77.184:3000/login", user);
+            const res = await axios.post("http://54.242.77.184:8001/login", user);
             setToken(res.data.token);
             setMessage("Login successful! Redirecting...");
             localStorage.removeItem("loginAttempts");

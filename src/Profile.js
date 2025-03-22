@@ -14,7 +14,7 @@ const Profile = () => {
         const fetchProfile = async () => {
             try {
                 // Cambié la URL para usar la IP pública de EC2
-                const response = await axios.get('http://54.242.77.184:3000/profile', {
+                const response = await axios.get('http://54.242.77.184:8001/profile', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },

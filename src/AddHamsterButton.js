@@ -16,10 +16,10 @@ const AddHamsterButton = ({ fetchHamsters }) => {
 
     const fetchDevicesAndUsers = async () => {
         try {
-            const deviceResponse = await axios.get("http://localhost:3000/devices"); // Fetch devices
+            const deviceResponse = await axios.get("http://localhost:8001/devices"); // Fetch devices
             setDevices(deviceResponse.data); // Set the devices in state
 
-            const userResponse = await axios.get("http://localhost:3000/users"); // Fetch users
+            const userResponse = await axios.get("http://localhost:8001/users"); // Fetch users
             setUsers(userResponse.data); // Set the users in state
         } catch (error) {
             console.error("Error fetching devices or users:", error); // Handle errors
@@ -46,7 +46,7 @@ const AddHamsterButton = ({ fetchHamsters }) => {
         };
 
         try {
-            await axios.post("http://localhost:3000/hamsters", hamsterData); // Send hamster data to the backend
+            await axios.post("http://localhost:8001/hamsters", hamsterData); // Send hamster data to the backend
             setOpen(false); // Close the dialog
             fetchHamsters(); // Re-fetch the hamsters to update the list
         } catch (error) {

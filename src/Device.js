@@ -19,8 +19,7 @@ const Device = () => {
 
     const fetchDevices = async () => {
         try {
-            // Cambié localhost:3000 por la IP de tu EC2 con FastAPI
-            const response = await axios.get("http://54.242.77.184:8000/devices");
+            const response = await axios.get("http://54.242.77.184:8001/devices");
             setDevices(response.data);
         } catch (error) {
             console.error("Error fetching devices:", error);
@@ -30,8 +29,7 @@ const Device = () => {
 
     const handleDelete = async (id) => {
         try {
-            // Cambié localhost:3000 por la IP de tu EC2 con FastAPI
-            await axios.delete(`http://54.242.77.184:8000/devices/${id}`);
+            await axios.delete(`http://54.242.77.184:8001/devices/${id}`);
             fetchDevices();
         } catch (error) {
             console.error("Error deleting device:", error);
@@ -64,8 +62,7 @@ const Device = () => {
 
     const handleSubmit = async () => {
         try {
-            // Cambié localhost:3000 por la IP de tu EC2 con FastAPI
-            await axios.put(`http://54.242.77.184:8000/devices/${selectedDevice.id}`, formData);
+            await axios.put(`http://54.242.77.184:8001/devices/${selectedDevice.id}`, formData);
             fetchDevices();
             setOpen(false);
         } catch (error) {
