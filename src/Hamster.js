@@ -1,163 +1,189 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "../src/Hamster.css";
-import AddHamsterButton from "./AddHamsterButton";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import * as XLSX from "xlsx";
+import Hamster from "./Hamster";
+import Device from "./Device";
+import "./Dashboard.css";
+import UserChart from "./UserChart";
+import axios from "axios"; // Asegúrate de tener axios instalado
 
-const Hamster = () => {
-    const [hamsters, setHamsters] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [selectedHamster, setSelectedHamster] = useState(null);
-    const [formData, setFormData] = useState({
-        name: "",
-        breed: "",
-        age: "",
-        weight: "",
-        health_notes: "",
-        device_id: "",
-        user_id: "",
-    });
+function Dashboard() {
+    const { role } = useParams();
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [file, setFile] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const usersPerPage = 5;
+
+    const apiUrl = "http://54.242.77.184:8000"; // Cambié localhost por la IP pública de EC2
 
     useEffect(() => {
-        fetchHamsters();
-    }, []);
-
-    const fetchHamsters = async () => {
-        try {
-            const response = await axios.get("http://localhost:3000/hamsters");
-            setHamsters(response.data);
-        } catch (error) {
-            console.error("Error fetching hamsters:", error);
-            alert("Failed to retrieve hamsters. Please check your connection and try again.");
+        if (role === "admin") {
+            fetch(`${apiUrl}/users`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch users");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    setUsers(data);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    setError(error.message);
+                    setLoading(false);
+                });
         }
+    }, [role]);
+
+    const downloadExcel = () => {
+        const worksheet = XLSX.utils.json_to_sheet(users);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+        XLSX.writeFile(workbook, "users.xlsx");
     };
 
-    const handleDelete = async (id) => {
-        try {
-            await axios.delete(`http://localhost:3000/hamsters/${id}`);
-            fetchHamsters();
-        } catch (error) {
-            console.error("Error deleting hamster:", error);
-            alert("Failed to delete the hamster. Please check your connection and try again.");
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const deleteUser = (id) => {
+        fetch(`${apiUrl}/users/${id}`, {
+            method: "DELETE",
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to delete user");
+                }
+                setUsers(users.filter((user) => user.id !== id));
+            })
+            .catch((error) => {
+                setError(error.message);
+            });
+    };
+
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+    const uploadExcel = () => {
+        if (!file) {
+            setError("Please select a file first.");
+            return;
         }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        axios.post(`${apiUrl}/import-excel`, formData)
+            .then((response) => {
+                alert(response.data.message);
+                if (response.data.insertedRows > 0) {
+                    fetch(`${apiUrl}/users`)
+                        .then((response) => response.json())
+                        .then((data) => setUsers(data));
+                }
+            })
+            .catch((err) => {
+                setError("Failed to upload the file.");
+                console.error(err);
+            });
     };
-
-    const handleEdit = (hamster) => {
-        setSelectedHamster(hamster);
-        setFormData({
-            name: hamster.name,
-            breed: hamster.breed,
-            age: hamster.age,
-            weight: hamster.weight,
-            health_notes: hamster.health_notes,
-            device_id: hamster.device_id,
-            user_id: hamster.user_id,
-        });
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setSelectedHamster(null);
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = async () => {
-        try {
-            await axios.put(`http://localhost:3000/hamsters/${selectedHamster.id}`, formData);
-            fetchHamsters();
-            setOpen(false);
-        } catch (error) {
-            console.error("Error updating hamster:", error);
-            alert("Failed to update the hamster. Please check your connection and try again.");
-        }
-    };
-
-    // Paginación
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentHamsters = hamsters.slice(indexOfFirstItem, indexOfLastItem);
-
-    const totalPages = Math.ceil(hamsters.length / itemsPerPage);
 
     return (
-        <>
-            <div className="header-container">
-                <h1>Hamster List</h1>
-                <AddHamsterButton fetchHamsters={fetchHamsters} />
-            </div>
+        <div className="dashboard-container">
+            <h1>{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</h1>
+            {role === "admin" ? (
+                <div className="admin-section">
+                    <div className="top-controls">
+                        <input
+                            type="text"
+                            placeholder="Search Users"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="search-input"
+                        />
+                        <div className="buttons-container">
+                            <button className="btn success" onClick={downloadExcel}>Download Excel</button>
+                            <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} id="file-upload" hidden />
+                            <label htmlFor="file-upload" className="btn primary">Select Excel File</label>
+                            <button className="btn secondary" onClick={uploadExcel} disabled={!file}>
+                                Upload Excel
+                            </button>
+                        </div>
+                    </div>
 
-            <table className="hamster-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>User ID</th>
-                        <th>Name</th>
-                        <th>Breed</th>
-                        <th>Age</th>
-                        <th>Weight</th>
-                        <th>Health Notes</th>
-                        <th>Device ID</th>
-                        <th>Created</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentHamsters.map((hamster) => (
-                        <tr key={hamster.id}>
-                            <td>{hamster.id}</td>
-                            <td>{hamster.user_id}</td>
-                            <td>{hamster.name}</td>
-                            <td>{hamster.breed}</td>
-                            <td>{hamster.age}</td>
-                            <td>{hamster.weight}</td>
-                            <td>{hamster.health_notes}</td>
-                            <td>{hamster.device_id}</td>
-                            <td>{hamster.created_at}</td>
-                            <td>
-                                <button className="hamster-edit" onClick={() => handleEdit(hamster)}>Edit</button>
-                                <button className="hamster-delete" onClick={() => handleDelete(hamster.id)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                    <div className="table-container">
+                        <h2>User List</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentUsers.map((user) => (
+                                    <tr key={user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.rol}</td>
+                                        <td>
+                                            <button className="btn danger" onClick={() => deleteUser(user.id)}>
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
 
-            {/* Paginación */}
-            <div className="pagination">
-                <button className="pagination-button" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-                    Previous
-                </button>
-                <span>Page {currentPage} of {totalPages}</span>
-                <button className="pagination-button" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
-                    Next
-                </button>
-            </div>
+                    <UserChart users={users} />
 
-            {open && (
-                <div className="modal">
-                    <h2>Edit Hamster</h2>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
-                    <input type="text" name="breed" value={formData.breed} onChange={handleChange} placeholder="Breed" />
-                    <input type="text" name="age" value={formData.age} onChange={handleChange} placeholder="Age" />
-                    <input type="text" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" />
-                    <input type="text" name="health_notes" value={formData.health_notes} onChange={handleChange} placeholder="Health Notes" />
-                    <input type="text" name="device_id" value={formData.device_id} onChange={handleChange} placeholder="Device ID" />
-                    <input type="text" name="user_id" value={formData.user_id} onChange={handleChange} placeholder="User ID" />
-                    <button className="modal-button" onClick={handleClose}>Cancel</button>
-                    <button className="modal-button" onClick={handleSubmit}>Save</button>
+                    <div className="pagination">
+                        <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+                            Previous
+                        </button>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentPage(index + 1)}
+                                className={index + 1 === currentPage ? "active" : ""}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                        <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                            Next
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <div className="user-section">
+                    <Hamster />
+                    <Device />
                 </div>
             )}
-        </>
+        </div>
     );
-};
+}
 
-export default Hamster;
+export default Dashboard;

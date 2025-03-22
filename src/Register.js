@@ -21,7 +21,7 @@ export default function Register() {
         e.preventDefault();
         try {
             // Enviar los datos del usuario al backend para registrarse
-            await axios.post("http://localhost:3000/register", user);
+            await axios.post("http://54.242.77.184:3000/register", user); // Cambié la URL a la IP pública de EC2
             
             // Mostrar mensaje de éxito
             setMessage("Registration successful!");

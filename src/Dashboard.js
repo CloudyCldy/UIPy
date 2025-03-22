@@ -17,9 +17,11 @@ function Dashboard() {
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 5;
 
+    const apiUrl = "http://54.242.77.184:8000"; // IP pública de tu EC2 con FastAPI
+
     useEffect(() => {
         if (role === "admin") {
-            fetch("http://localhost:3000/users")
+            fetch(`${apiUrl}/users`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error("Failed to fetch users");
@@ -53,7 +55,7 @@ function Dashboard() {
     };
 
     const deleteUser = (id) => {
-        fetch(`http://localhost:3000/users/${id}`, {
+        fetch(`${apiUrl}/users/${id}`, {
             method: "DELETE",
         })
             .then((response) => {
@@ -83,19 +85,19 @@ function Dashboard() {
             setError("Please select a file first.");
             return;
         }
-    
+
         const formData = new FormData();
         formData.append("file", file);
-    
-        axios.post("http://localhost:3000/import-excel", formData)
+
+        axios.post(`${apiUrl}/import-excel`, formData)
             .then((response) => {
                 alert(response.data.message);
-                
+
                 // Check if insertedRows is a number and update state accordingly
                 if (response.data.insertedRows > 0) {
                     // If insertedRows > 0, you can fetch the users again or update state accordingly
                     // Example of fetching users again (you could optimize this as per your needs)
-                    fetch("http://localhost:3000/users")
+                    fetch(`${apiUrl}/users`)
                         .then((response) => response.json())
                         .then((data) => setUsers(data));
                 }
@@ -105,7 +107,7 @@ function Dashboard() {
                 console.error(err);
             });
     };
-    
+
     return (
         <div className="dashboard-container">
             <h1>{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</h1>
@@ -128,7 +130,7 @@ function Dashboard() {
                             </button>
                         </div>
                     </div>
-                    
+
                     <div className="table-container">
                         <h2>User List</h2>
                         <table>
@@ -160,7 +162,7 @@ function Dashboard() {
                     </div>
 
                     <UserChart users={users} />
-                    
+
                     <div className="pagination">
                         <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
                             Previous
