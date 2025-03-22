@@ -17,7 +17,7 @@ function Dashboard() {
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 5;
 
-    const apiUrl = "http://54.242.77.184:8000"; // IP pública de tu EC2 con FastAPI
+    const apiUrl = "http://54.242.77.184:8000/login"; // IP pública de tu EC2 con FastAPI
 
     useEffect(() => {
         if (role === "admin") {
