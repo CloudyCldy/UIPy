@@ -1,5 +1,3 @@
-// Register.js
-
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +30,7 @@ export default function Register() {
             setTimeout(() => navigate("/login"), 2000);
         } catch (error) {
             // Capturar y mostrar errores del backend
-            setMessage(error.response?.data?.detail || "Registration failed.");
+            setMessage(error.response?.data?.message || "Registration failed.");
         }
     };
 
