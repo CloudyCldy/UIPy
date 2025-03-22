@@ -5,6 +5,7 @@ import Login from "./Login";
 import Profile from "./Profile";
 import Dashboard from "./Dashboard";
 import "./App.css"; 
+import Blog from "./Blog";  // Importa el componente Blog
 import logo from '../src/hobito.png';
 
 function Navbar() {
@@ -47,7 +48,9 @@ function Navbar() {
                     {token && <button className="navbar-button" onClick={handleLogout}>Logout</button>}
                 </div>
             </div>
-            <h1 className="navbar-title">Hamtech</h1>
+            <Link to="/" className="navbar-title-link">
+                <h1 className="navbar-title">Hamtech</h1> {/* Haciendo clic aquí lleva al blog */}
+            </Link>
             <div className="navbar-links">
                 {!token && !isProfilePage && (
                     <>
@@ -61,6 +64,7 @@ function Navbar() {
                         P
                     </Link>
                 )}
+
                 
             </div>
         </div>
@@ -73,10 +77,12 @@ export default function App() {
             <Navbar />
             <div className="app-container">
                 <Routes>
+                <Route path="/" element={<Blog />} /> {/* Ruta por defecto */}
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/dashboard/:role" element={<Dashboard />} />
+
                 </Routes>
             </div>
         </Router>

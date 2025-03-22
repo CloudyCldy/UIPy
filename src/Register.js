@@ -34,6 +34,11 @@ export default function Register() {
         }
     };
 
+    // Función para regresar a la página anterior
+    const handleGoBack = () => {
+        navigate(-1); // Redirige a la página anterior en el historial
+    };
+
     return (
         <div className="register-wrap">
             <div className="register-html">
@@ -42,6 +47,9 @@ export default function Register() {
 
                     {/* Mostrar mensaje de error o éxito */}
                     {message && <p className="error-message">{message}</p>}
+
+                    {/* Botón de regresar */}
+                    <button onClick={handleGoBack} className="bac-button">Go Back</button>
 
                     <form onSubmit={handleRegister}>
                         {/* Campo para el nombre */}

@@ -73,6 +73,10 @@ export default function Login() {
         }
     }, [token, navigate]);
 
+    const handleBack = () => {
+        navigate(-1); // Navigate to the previous page
+    };
+
     return (
         <div className="login-wrap">
             <div className="login-html">
@@ -106,6 +110,11 @@ export default function Login() {
                             </button>
                         </div>
                     </form>
+                    <div className="group">
+                        <button className="bac-button" onClick={handleBack}>
+                            &#8592; {/* Left arrow icon */}BACK
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
