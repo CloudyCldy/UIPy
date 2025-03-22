@@ -51,31 +51,51 @@ export default function Login() {
         }
 
         try {
-            // Cambié la URL para usar la IP pública de EC2
-            const res = await axios.post("http://54.242.77.184:8001/login", user);
+            // Enviar los datos del usuario al backend para iniciar sesión
+            const res = await axios.post(
+                "http://54.242.77.184:8001/login", 
+                user, 
+                {
+                    headers: {
+                        "Content-Type": "application/json", // Especificar el tipo de contenido
+                    },
+                }
+            );
+            
+            // Guardar el token en el estado y en localStorage
             setToken(res.data.token);
+            localStorage.setItem("token", res.data.token);
+            
+            // Mostrar mensaje de éxito
             setMessage("Login successful! Redirecting...");
+            
+            // Reiniciar el contador de intentos
             localStorage.removeItem("loginAttempts");
             setAttempts(0);
         } catch (error) {
+            // Incrementar el contador de intentos fallidos
             const newAttempts = attempts + 1;
             setAttempts(newAttempts);
             localStorage.setItem("loginAttempts", newAttempts.toString());
-            setMessage(error.response?.data?.message || "Login failed");
+            
+            // Mostrar mensaje de error
+            setMessage(error.response?.data?.detail || "Login failed");
         }
     };
 
     useEffect(() => {
         if (token) {
-            localStorage.setItem("token", token);
+            // Decodificar el token para obtener el rol del usuario
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const role = decodedToken.rol;
+            const role = decodedToken.role; // Corregir: usar "role" en lugar de "rol"
+            
+            // Redirigir al dashboard según el rol
             navigate(`/dashboard/${role}`);
         }
     }, [token, navigate]);
 
     const handleBack = () => {
-        navigate(-1); // Navigate to the previous page
+        navigate(-1); // Navegar a la página anterior
     };
 
     return (
@@ -113,7 +133,7 @@ export default function Login() {
                     </form>
                     <div className="group">
                         <button className="bac-button" onClick={handleBack}>
-                            &#8592; {/* Left arrow icon */}BACK
+                            &#8592; {/* Flecha izquierda */}BACK
                         </button>
                     </div>
                 </div>
