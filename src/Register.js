@@ -21,7 +21,15 @@ export default function Register() {
         e.preventDefault();
         try {
             // Enviar los datos del usuario al backend para registrarse
-            await axios.post("http://54.242.77.184:8001/register", user); // Cambié la URL a la IP pública de EC2
+            const response = await axios.post(
+                "http://54.242.77.184:8001/register", 
+                user, 
+                {
+                    headers: {
+                        "Content-Type": "application/json", // Especificar el tipo de contenido
+                    },
+                }
+            );
             
             // Mostrar mensaje de éxito
             setMessage("Registration successful!");
@@ -30,7 +38,12 @@ export default function Register() {
             setTimeout(() => navigate("/login"), 2000);
         } catch (error) {
             // Capturar y mostrar errores del backend
-            setMessage(error.response?.data?.message || "Registration failed.");
+            if (error.response?.data?.detail) {
+                // Si hay un error 422, mostrar los detalles
+                setMessage(error.response.data.detail.map(err => err.msg).join(", "));
+            } else {
+                setMessage("Registration failed.");
+            }
         }
     };
 
