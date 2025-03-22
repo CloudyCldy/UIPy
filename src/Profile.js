@@ -44,7 +44,7 @@ const Profile = () => {
                     <img src={logo} alt="Logo" className="logo" />
                     <h2 className="profile-name">{user.name}</h2>
                     <p className="profile-email">{user.email}</p>
-                    <p className="profile-role">{user.rol}</p>
+                    <p className="profile-role">{user.role}</p>
                 </div>
 
                 <div className="profile-body">

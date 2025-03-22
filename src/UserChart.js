@@ -3,7 +3,7 @@ import "../src/Chart.css";
 
 const UserChart = ({ users }) => {
     const roleCounts = users.reduce((acc, user) => {
-        acc[user.rol] = (acc[user.rol] || 0) + 1;
+        acc[user.role] = (acc[user.role] || 0) + 1;
         return acc;
     }, {});
 
