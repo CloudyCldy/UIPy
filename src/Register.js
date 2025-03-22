@@ -5,7 +5,7 @@ import "../src/Register.css"; // Asegúrate de que el archivo CSS esté bien enl
 
 export default function Register() {
     // Estado para almacenar los datos del usuario
-    const [user, setUser] = useState({ name: "", email: "", password: "", rol: "normal" });
+    const [user, setUser] = useState({ name: "", email: "", password: "", role: "normal" });
     
     // Estado para almacenar mensajes de éxito o error
     const [message, setMessage] = useState(null);
@@ -99,12 +99,12 @@ export default function Register() {
                         
                         {/* Selector de rol del usuario */}
                         <div className="group">
-                            <label htmlFor="rol" className="label">Role</label>
+                            <label htmlFor="role" className="label">Role</label>
                             <select
-                                id="rol"
-                                name="rol"
+                                id="role"
+                                name="role"
                                 className="input"
-                                value={user.rol}
+                                value={user.role}
                                 onChange={handleChange}
                                 required
                             >
