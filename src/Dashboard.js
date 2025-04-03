@@ -5,7 +5,8 @@ import Hamster from "./Hamster";
 import Device from "./Device";
 import "./Dashboard.css";
 import UserChart from "./UserChart";
-import axios from "axios"; // Asegúrate de instalar axios
+import axios from "axios"; // Make sure to install axios
+import SensorDataForm from "./SensorDataForm";
 
 function Dashboard() {
     const { role } = useParams();
@@ -17,25 +18,12 @@ function Dashboard() {
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 5;
 
-    const apiUrl = "http://54.242.77.184:8000/login"; // IP pública de tu EC2 con FastAPI
-
     useEffect(() => {
         if (role === "admin") {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                setError("No estás autenticado. Por favor, inicia sesión.");
-                setLoading(false);
-                return;
-            }
-
-            fetch(`${apiUrl}/users`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
+            fetch("http://3.80.117.46:8001/users")
                 .then((response) => {
                     if (!response.ok) {
-                        throw new Error("Error al cargar los usuarios");
+                        throw new Error("Failed to fetch users");
                     }
                     return response.json();
                 })
@@ -66,21 +54,12 @@ function Dashboard() {
     };
 
     const deleteUser = (id) => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            setError("No estás autenticado. Por favor, inicia sesión.");
-            return;
-        }
-
-        fetch(`${apiUrl}/users/${id}`, {
+        fetch(`http://3.80.117.46:8001/users/${id}`, {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Error al eliminar el usuario");
+                    throw new Error("Failed to delete user");
                 }
                 setUsers(users.filter((user) => user.id !== id));
             })
@@ -99,48 +78,35 @@ function Dashboard() {
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-    // Función para subir el archivo Excel
+    // Function to handle file upload
     const uploadExcel = () => {
         if (!file) {
-            setError("Por favor, selecciona un archivo primero.");
+            setError("Please select a file first.");
             return;
         }
-
-        const token = localStorage.getItem("token");
-        if (!token) {
-            setError("No estás autenticado. Por favor, inicia sesión.");
-            return;
-        }
-
+    
         const formData = new FormData();
         formData.append("file", file);
-
-        axios.post(`${apiUrl}/import-excel`, formData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "multipart/form-data",
-            },
-        })
+    
+        axios.post("http://3.80.117.46:8001/import-excel", formData)
             .then((response) => {
                 alert(response.data.message);
-
-                // Si se insertaron filas, actualiza la lista de usuarios
+                
+                // Check if insertedRows is a number and update state accordingly
                 if (response.data.insertedRows > 0) {
-                    fetch(`${apiUrl}/users`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    })
+                    // If insertedRows > 0, you can fetch the users again or update state accordingly
+                    // Example of fetching users again (you could optimize this as per your needs)
+                    fetch("http://3.80.117.46:8001/users")
                         .then((response) => response.json())
                         .then((data) => setUsers(data));
                 }
             })
             .catch((err) => {
-                setError("Error al subir el archivo.");
+                setError("Failed to upload the file.");
                 console.error(err);
             });
     };
-
+    
     return (
         <div className="dashboard-container">
             <h1>{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</h1>
@@ -149,31 +115,31 @@ function Dashboard() {
                     <div className="top-controls">
                         <input
                             type="text"
-                            placeholder="Buscar usuarios"
+                            placeholder="Search Users"
                             value={searchTerm}
                             onChange={handleSearchChange}
                             className="search-input"
                         />
                         <div className="buttons-container">
-                            <button className="btn success" onClick={downloadExcel}>Descargar Excel</button>
+                            <button className="btn success" onClick={downloadExcel}>Download Excel</button>
                             <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} id="file-upload" hidden />
-                            <label htmlFor="file-upload" className="btn primary">Seleccionar archivo Excel</label>
+                            <label htmlFor="file-upload" className="btn primary">Select Excel File</label>
                             <button className="btn secondary" onClick={uploadExcel} disabled={!file}>
-                                Subir Excel
+                                Upload Excel
                             </button>
                         </div>
                     </div>
-
+                    
                     <div className="table-container">
-                        <h2>Lista de usuarios</h2>
+                        <h2>User List</h2>
                         <table>
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Nombre</th>
+                                    <th>Name</th>
                                     <th>Email</th>
-                                    <th>Rol</th>
-                                    <th>Acciones</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -182,10 +148,10 @@ function Dashboard() {
                                         <td>{user.id}</td>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
-                                        <td>{user.role}</td>
+                                        <td>{user.rol}</td>
                                         <td>
                                             <button className="btn danger" onClick={() => deleteUser(user.id)}>
-                                                Eliminar
+                                                Delete
                                             </button>
                                         </td>
                                     </tr>
@@ -195,10 +161,10 @@ function Dashboard() {
                     </div>
 
                     <UserChart users={users} />
-
+                    
                     <div className="pagination">
                         <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
-                            Anterior
+                            Previous
                         </button>
                         {[...Array(totalPages)].map((_, index) => (
                             <button
@@ -210,7 +176,7 @@ function Dashboard() {
                             </button>
                         ))}
                         <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
-                            Siguiente
+                            Next
                         </button>
                     </div>
                 </div>
@@ -218,6 +184,7 @@ function Dashboard() {
                 <div className="user-section">
                     <Hamster />
                     <Device />
+                    <SensorDataForm/>
                 </div>
             )}
         </div>
