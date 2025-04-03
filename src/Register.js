@@ -22,7 +22,7 @@ export default function Register() {
         try {
             // Enviar los datos del usuario al backend para registrarse
             const response = await axios.post(
-                "http://54.242.77.184:8001/register", 
+                "http://34.228.9.133:8001/register", 
                 user, 
                 {
                     headers: {
