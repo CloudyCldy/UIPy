@@ -1,0 +1,166 @@
+/* Estilos Hamster - Colores marrones, naranjas y beige */
+:root {
+    --hamster-brown: #8B4513;
+    --hamster-orange: #FFA500;
+    --hamster-light: #F5DEB3;
+    --hamster-dark: #654321;
+    --hamster-accent: #D2691E;
+}
+
+.sensor-data-container {
+    font-family: 'Arial', sans-serif;
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--hamster-light);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hamster-title {
+    color: var(--hamster-dark);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.error-message {
+    color: #D8000C;
+    background-color: #FFD2D2;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.hamster-loading {
+    text-align: center;
+    color: var(--hamster-accent);
+    font-size: 1.2rem;
+    margin: 20px 0;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.hamster-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.hamster-table thead {
+    background-color: var(--hamster-brown);
+    color: white;
+}
+
+.hamster-table th,
+.hamster-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.hamster-table th {
+    font-weight: bold;
+}
+
+.hamster-table tbody tr:nth-child(even) {
+    background-color: rgba(245, 222, 179, 0.3);
+}
+
+.hamster-table tbody tr:hover {
+    background-color: rgba(210, 105, 30, 0.1);
+}
+
+.no-data {
+    text-align: center;
+    color: var(--hamster-accent);
+    font-style: italic;
+}
+
+.hamster-pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.hamster-page-btn {
+    padding: 8px 15px;
+    background-color: var(--hamster-light);
+    border: 1px solid var(--hamster-dark);
+    border-radius: 5px;
+    color: var(--hamster-dark);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.hamster-page-btn:hover:not(:disabled) {
+    background-color: var(--hamster-orange);
+    color: white;
+}
+
+.hamster-page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.hamster-page-btn.active {
+    background-color: var(--hamster-brown);
+    color: white;
+    border-color: var(--hamster-brown);
+}
+
+.hamster-footer {
+    text-align: center;
+    margin-top: 15px;
+    color: var(--hamster-dark);
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sensor-data-container {
+        padding: 15px;
+    }
+
+    .hamster-title {
+        font-size: 1.5rem;
+    }
+
+    .hamster-table th,
+    .hamster-table td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+    .hamster-page-btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sensor-data-container {
+        padding: 10px;
+    }
+
+    .hamster-table th,
+    .hamster-table td {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+    }
+
+    .hamster-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
