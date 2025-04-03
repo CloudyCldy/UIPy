@@ -87,10 +87,10 @@ export default function Login() {
         if (token) {
             // Decodificar el token para obtener el rol del usuario
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const role = decodedToken.role; // Corregir: usar "role" en lugar de "rol"
+            const rol = decodedToken.rol; // Corregir: usar "rol" en lugar de "rol"
             
             // Redirigir al dashboard según el rol
-            navigate(`/dashboard/${role}`);
+            navigate(`/dashboard/${rol}`);
         }
     }, [token, navigate]);
 
