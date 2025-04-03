@@ -9,7 +9,7 @@ import axios from "axios"; // Make sure to install axios
 import SensorDataForm from "./SensorDataForm";
 
 function Dashboard() {
-    const { role } = useParams();
+    const { rol} = useParams();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -19,7 +19,7 @@ function Dashboard() {
     const usersPerPage = 5;
 
     useEffect(() => {
-        if (role === "admin") {
+        if (rol === "admin") {
             fetch("http://3.80.117.46:8001/users")
                 .then((response) => {
                     if (!response.ok) {
@@ -36,7 +36,7 @@ function Dashboard() {
                     setLoading(false);
                 });
         }
-    }, [role]);
+    }, [rol]);
 
     const downloadExcel = () => {
         const worksheet = XLSX.utils.json_to_sheet(users);
@@ -109,8 +109,8 @@ function Dashboard() {
     
     return (
         <div className="dashboard-container">
-            <h1>{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</h1>
-            {role === "admin" ? (
+            <h1>{rol === "admin" ? "Admin Dashboard" : "User Dashboard"}</h1>
+            {rol === "admin" ? (
                 <div className="admin-section">
                     <div className="top-controls">
                         <input
