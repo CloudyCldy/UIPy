@@ -54,7 +54,7 @@ function Dashboard() {
     };
 
     const deleteUser = (id) => {
-        fetch(`http://3.80.117.46:8001/users/${id}`, {
+        fetch(`http://34.228.9.133:8001/users/${id}`, {
             method: "DELETE",
         })
             .then((response) => {
@@ -88,7 +88,7 @@ function Dashboard() {
         const formData = new FormData();
         formData.append("file", file);
     
-        axios.post("http://3.80.117.46:8001/import-excel", formData)
+        axios.post("http://34.228.9.133:8001/import-excel", formData)
             .then((response) => {
                 alert(response.data.message);
                 
