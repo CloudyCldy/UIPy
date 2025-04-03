@@ -15,7 +15,7 @@ const SensorDataForm = () => {
     const fetchSensorData = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('http://3.80.117.46:8001/sensores');
+            const response = await fetch('http://34.228.9.133:8001/sensores');
             
             if (!response.ok) {
                 throw new Error('Failed to load data');
