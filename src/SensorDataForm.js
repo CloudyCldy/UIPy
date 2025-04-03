@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './SensorDataForm.css';
 
 const SensorDataForm = () => {
-    const [sensorData, setSensorData] = useState([]);
+    const [sensorData, setSensorData] = useState(() => []);
     const [error, setError] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
@@ -22,10 +22,11 @@ const SensorDataForm = () => {
             }
 
             const data = await response.json();
-            setSensorData(data);
+            setSensorData(Array.isArray(data) ? data : []);
             setError('');
         } catch (err) {
             setError('Error connecting to the server');
+            setSensorData([]);
         } finally {
             setIsLoading(false);
         }
@@ -60,13 +61,13 @@ const SensorDataForm = () => {
                     </thead>
                     <tbody>
                         {currentItems.length > 0 ? (
-                            currentItems.map((data) => (
-                                <tr key={data.id}>
-                                    <td>{data.id}</td>
-                                    <td>{data.device_id}</td>
-                                    <td>{data.temperature}°C</td>
-                                    <td>{data.humidity}%</td>
-                                    <td>{new Date(data.recorded_at).toLocaleString()}</td>
+                            currentItems.map((data, index) => (
+                                <tr key={data.id || `temp-key-${index}`}>
+                                    <td>{data.id || 'N/A'}</td>
+                                    <td>{data.device_id || 'Unknown'}</td>
+                                    <td>{data.temperature !== undefined ? `${data.temperature}°C` : 'N/A'}</td>
+                                    <td>{data.humidity !== undefined ? `${data.humidity}%` : 'N/A'}</td>
+                                    <td>{data.recorded_at ? new Date(data.recorded_at).toLocaleString() : 'N/A'}</td>
                                 </tr>
                             ))
                         ) : (
@@ -79,7 +80,7 @@ const SensorDataForm = () => {
             </div>
 
             {/* Paginación */}
-            {sensorData.length > itemsPerPage && (
+            {totalPages > 1 && (
                 <div className="hamster-pagination">
                     <button 
                         onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
@@ -91,7 +92,7 @@ const SensorDataForm = () => {
                     
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                         <button
-                            key={number}
+                            key={`page-${number}`}
                             onClick={() => paginate(number)}
                             className={`hamster-page-btn ${currentPage === number ? 'active' : ''}`}
                         >
