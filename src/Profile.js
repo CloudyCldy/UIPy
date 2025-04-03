@@ -24,7 +24,7 @@ const Profile = () => {
 
             try {
                 // Cambié la URL para usar la IP pública de EC2
-                const response = await axios.get('http://54.242.77.184:8001/profile', {
+                const response = await axios.get('http://34.228.9.133:8001/profile', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
