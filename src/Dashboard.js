@@ -20,7 +20,7 @@ function Dashboard() {
 
     useEffect(() => {
         if (rol === "admin") {
-            fetch("http://3.80.117.46:8001/users")
+            fetch("http://34.228.9.133:8001/users")
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error("Failed to fetch users");
@@ -96,7 +96,7 @@ function Dashboard() {
                 if (response.data.insertedRows > 0) {
                     // If insertedRows > 0, you can fetch the users again or update state accordingly
                     // Example of fetching users again (you could optimize this as per your needs)
-                    fetch("http://3.80.117.46:8001/users")
+                    fetch("http://34.228.9.133:8001/users")
                         .then((response) => response.json())
                         .then((data) => setUsers(data));
                 }
