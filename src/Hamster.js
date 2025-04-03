@@ -17,7 +17,7 @@ function Dashboard() {
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 5;
 
-    const apiUrl = "http://54.242.77.184:8000"; // Cambié localhost por la IP pública de EC2
+    const apiUrl = "http://34.228.9.133:8001"; // Cambié localhost por la IP pública de EC2
 
     useEffect(() => {
         if (role === "admin") {
