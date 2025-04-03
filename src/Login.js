@@ -53,7 +53,7 @@ export default function Login() {
         try {
             // Enviar los datos del usuario al backend para iniciar sesión
             const res = await axios.post(
-                "http://54.242.77.184:8001/login", 
+                "http://34.228.9.133:8001/login", 
                 user, 
                 {
                     headers: {
