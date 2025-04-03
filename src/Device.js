@@ -19,7 +19,7 @@ const Device = () => {
 
     const fetchDevices = async () => {
         try {
-            const response = await axios.get("http://54.242.77.184:8001/devices");
+            const response = await axios.get("http://34.228.9.133:8001/devices");
             setDevices(response.data);
         } catch (error) {
             console.error("Error fetching devices:", error);
@@ -29,7 +29,7 @@ const Device = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://54.242.77.184:8001/devices/${id}`);
+            await axios.delete(`http://34.228.9.133:8001/devices/${id}`);
             fetchDevices();
         } catch (error) {
             console.error("Error deleting device:", error);
@@ -62,7 +62,7 @@ const Device = () => {
 
     const handleSubmit = async () => {
         try {
-            await axios.put(`http://54.242.77.184:8001/devices/${selectedDevice.id}`, formData);
+            await axios.put(`http://34.228.9.133:8001/devices/${selectedDevice.id}`, formData);
             fetchDevices();
             setOpen(false);
         } catch (error) {
